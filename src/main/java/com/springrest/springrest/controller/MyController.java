@@ -32,4 +32,14 @@ public class MyController {
     public Course addCourse(@RequestBody Course course){
         return this.courseService.addCourse(course);
     }
+
+    @PutMapping("/updateCourse/{courseId}")
+    public String updateCourse(@PathVariable String courseId, @RequestBody Course newCourseInfo){
+        return this.courseService.updateCourse(Long.parseLong(courseId), newCourseInfo);
+    }
+
+    @DeleteMapping("/courses/{courseId}")
+    public Course deleteCourse(@PathVariable String courseId){
+        return this.courseService.deleteCourse(Long.parseLong(courseId));
+    }
 }
