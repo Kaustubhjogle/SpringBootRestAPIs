@@ -3,9 +3,7 @@ package com.springrest.springrest.controller;
 import com.springrest.springrest.entities.Course;
 import com.springrest.springrest.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-    import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +26,10 @@ public class MyController {
     @GetMapping("/courses/{courseId}")
     public Course getCourse(@PathVariable String courseId){
         return this.courseService.getCourse(Long.parseLong(courseId));
+    }
+
+    @PostMapping("/courses")
+    public Course addCourse(@RequestBody Course course){
+        return this.courseService.addCourse(course);
     }
 }
