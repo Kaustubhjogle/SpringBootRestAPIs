@@ -3,7 +3,10 @@ package com.springrest.springrest.controller;
 import com.springrest.springrest.entities.Course;
 import com.springrest.springrest.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -39,7 +42,13 @@ public class MyController {
     }
 
     @DeleteMapping("/courses/{courseId}")
-    public Course deleteCourse(@PathVariable String courseId){
-        return this.courseService.deleteCourse(Long.parseLong(courseId));
+    public ResponseEntity<HttpStatus> deleteCourse(@PathVariable String courseId){
+        try{
+            this.courseService.deleteCourse(Long.parseLong(courseId));
+            return new ResponseEntity<>(HttpStatus.OK);
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Some Error Occurred");
+        }
+
     }
 }
