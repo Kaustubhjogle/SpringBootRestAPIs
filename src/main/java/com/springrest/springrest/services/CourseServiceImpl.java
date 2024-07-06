@@ -1,6 +1,8 @@
 package com.springrest.springrest.services;
 
+import com.springrest.springrest.dao.CourseDao;
 import com.springrest.springrest.entities.Course;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,6 +13,10 @@ public class CourseServiceImpl implements CourseService{
 
     List<Course> list;
 
+    @Autowired
+    private CourseDao courseDao;
+
+
     //Constructor
     public CourseServiceImpl(){
         list = new ArrayList<>();
@@ -20,51 +26,30 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public List<Course> getCourses() {
-        return list;
+        return courseDao.findAll();
     }
 
     @Override
     public Course getCourse(long courseId) {
-        Course courseValue = null;
-        for(Course c: list){
-            if(courseId == c.getId()){
-                courseValue =c ;
-                break;
-            }
-        }
-        return courseValue;
+        return courseDao.getById(courseId);
     }
 
     @Override
     public Course addCourse(Course course) {
-        list.add(course);
-        return course;
+        return courseDao.save(course);
     }
 
     @Override
-    public String updateCourse(long courseId, Course newCourseInfo) {
-        for(Course c : list){
-            if(c.getId() == courseId){
-                c.setId(newCourseInfo.getId());
-                c.setTitle(newCourseInfo.getTitle());
-                c.setDescription(newCourseInfo.getDescription());
-                break;
-            }
-        }
+    public String updateCourse(Course newCourseInfo) {
+        courseDao.save(newCourseInfo);
         return "Course Updated Successfully";
     }
 
     @Override
     public Course deleteCourse(long courseId) {
-        Course deleteInfo= null;
-        for(Course c: list){
-            if(c.getId() == courseId){
-                deleteInfo= c;
-                list.remove(c);
-                break;
-            }
-        }
-        return deleteInfo;
+        Course entity = courseDao.getOne(courseId);
+        courseDao.delete(entity);
+        return entity;
     }
 
 }

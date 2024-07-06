@@ -36,9 +36,9 @@ public class MyController {
         return this.courseService.addCourse(course);
     }
 
-    @PutMapping("/updateCourse/{courseId}")
-    public String updateCourse(@PathVariable String courseId, @RequestBody Course newCourseInfo){
-        return this.courseService.updateCourse(Long.parseLong(courseId), newCourseInfo);
+    @PutMapping("/updateCourse")
+    public String updateCourse(@RequestBody Course newCourseInfo){
+        return this.courseService.updateCourse(newCourseInfo);
     }
 
     @DeleteMapping("/courses/{courseId}")
@@ -47,7 +47,7 @@ public class MyController {
             this.courseService.deleteCourse(Long.parseLong(courseId));
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Some Error Occurred");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
