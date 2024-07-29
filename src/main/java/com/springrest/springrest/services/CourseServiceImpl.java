@@ -2,11 +2,14 @@ package com.springrest.springrest.services;
 
 import com.springrest.springrest.dao.CourseDao;
 import com.springrest.springrest.entities.Course;
+import com.springrest.springrest.exceptions.CourseAlreadyPresentException;
+import com.springrest.springrest.exceptions.CourseNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CourseServiceImpl implements CourseService{
@@ -36,7 +39,12 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public Course addCourse(Course course) {
-        return courseDao.save(course);
+        Boolean entity = courseDao.existsById(course.getId());
+        if(entity){
+            throw new CourseAlreadyPresentException("Course Already present with ID: " + course.getId());
+        }else {
+            return courseDao.save(course);
+        }
     }
 
     @Override
@@ -47,9 +55,14 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public Course deleteCourse(long courseId) {
-        Course entity = courseDao.getOne(courseId);
-        courseDao.delete(entity);
-        return entity;
+        Optional<Course> entity = courseDao.findById(courseId);
+        if(entity.isPresent()){
+            courseDao.delete(entity.get());
+            return entity.get();
+        }else{
+            throw new CourseNotFoundException("No Course Found with ID: "+ courseId);
+        }
+
     }
 
 }
