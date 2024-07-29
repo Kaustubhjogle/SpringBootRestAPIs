@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 public class MyController {
 
     @Autowired
@@ -42,10 +43,10 @@ public class MyController {
     }
 
     @DeleteMapping("/courses/{courseId}")
-    public ResponseEntity<HttpStatus> deleteCourse(@PathVariable String courseId){
+    public ResponseEntity<String> deleteCourse(@PathVariable String courseId){
         try{
             this.courseService.deleteCourse(Long.parseLong(courseId));
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>("Course Deleted Successfully",HttpStatus.OK);
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
